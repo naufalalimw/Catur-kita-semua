@@ -26,4 +26,9 @@ void queesPath (List L, TabChar T, Path *PL, coordinat CurrCoor);
 
 void kingsPath (List L, TabChar T, Path *PL, coordinat CurrCoor);
 
+void kill (List L, TabChar T, coordinat CurrCoor, coordinat NextCoor);
+
+void castling (List L, TabChar T, coordinat KingCoor, coordinat RooksCoor);
+
+boolean Iscastling (List L, TabChar T, coordinat KingCoor, coordinat RooksCoor); 
 #endif

@@ -1080,7 +1080,7 @@ void kingsPath (List L, TabChar T, Path *PL, coordinat CurrCoor){
     }
 }
 
-void kill (List L, TabChar T, char pieces , coordinat CurrCoor, coordinat NextCoor)
+void kill (List L, TabChar T, coordinat CurrCoor, coordinat NextCoor)
 {
     addressList CurrP, NextP;
     char CurrPieces, NextPieces;
@@ -1096,8 +1096,64 @@ void kill (List L, TabChar T, char pieces , coordinat CurrCoor, coordinat NextCo
 
     if (isPiecesMove(L,T,pieces,CurrCoor) && (!isAlly(Team(CurrP),Team(NextP)))) 
     {
-        CurrCoor = NextCoor;
         Info(NextP) = Info(CurrP);
+        DealokasiList(CurrP);
+    }    
+}
+
+
+void castling(List L, TabChar T, coordinat KingCoor, coordinat RooksCoor)
+{
+    addressList KingP, RooksP;
+    char KingPieces, RooksPieces;
+
+
+    KingCoor.hor = CharToInt(&KingCoor.hor);
+    RooksCoor.hor = CharToInt(&RooksCoor.hor);
+    KingPieces = T.TI[KingCoor.ver][KingCoor.hor];
+    RooksPieces = T.TI[RooksCoor.ver][RooksCoor.hor];
+    KingP = SearchList(L,KingPieces,KingCoor);
+    RooksP = SearchList(L,RooksPieces,RooksCoor);
+
+    if (Iscastling(L,T,KingCoor,RooksCoor))
+    {
+        if (Team(King) == 200)
+        {
+            Horizontal(KingP) = Horizontal(KingP) + 2;
+            Horizontal(RooksP) = Horizontal (RooksP) - 2;
+        } else if (Team(King)==100)
+        {
+            Horizontal(KingP) = Horizontal(KingP) - 2;
+            Horizontal(RooksP) = Horizontal(RooksP) + 2;
+        }
     }
     
+}
+
+boolean Iscastling (List L, TabChar T, coordinat KingCoor, coordinat RooksCoor)
+{
+    addressList KingP, RooksP;
+    char KingPieces, RooksPieces;
+
+
+    KingCoor.hor = CharToInt(&KingCoor.hor);
+    RooksCoor.hor = CharToInt(&RooksCoor.hor);
+    KingPieces = T.TI[KingCoor.ver][KingCoor.hor];
+    RooksPieces = T.TI[RooksCoor.ver][RooksCoor.hor];
+    KingP = SearchList(L,KingPieces,KingCoor);
+    RooksP = SearchList(L,RooksPieces,RooksCoor);
+
+    if (((Info(KingP)=='K') || (Info(KingP)=='k')) && ((Info(RooksP)=='R') || (Info(RooksP)=='r')) )
+    {
+        if ((KingCoor.hor == 5) && (KingCoor.ver == 8) && (RooksCoor.hor == 8) && (RooksCoor.ver == 8))
+        {
+            return true;
+        } else if ((KingCoor.hor == 4) && (KingCoor.ver == 1) && (RooksCoor.hor == 1) && (RooksCoor.ver == 1))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 }

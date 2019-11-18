@@ -1079,3 +1079,25 @@ void kingsPath (List L, TabChar T, Path *PL, coordinat CurrCoor){
         }
     }
 }
+
+void kill (List L, TabChar T, char pieces , coordinat CurrCoor, coordinat NextCoor)
+{
+    addressList CurrP, NextP;
+    char CurrPieces, NextPieces;
+
+
+    CurrCoor.hor = CharToInt(&CurrCoor.hor);
+    NextCoor.hor = CharToInt(&NextCoor.hor);
+    CurrPieces = T.TI[CurrCoor.ver][CurrCoor.hor];
+    NextPieces = T.TI[NextCoor.ver][NextCoor.hor];
+    CurrP = SearchList(L,CurrPieces,CurrCoor);
+    NextP = SearchList(L,NextPieces,NextCoor);
+
+
+    if (isPiecesMove(L,T,pieces,CurrCoor) && (!isAlly(Team(CurrP),Team(NextP)))) 
+    {
+        CurrCoor = NextCoor;
+        Info(NextP) = Info(CurrP);
+    }
+    
+}

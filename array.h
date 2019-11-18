@@ -2,14 +2,14 @@
 /* Berisi definisi dan semua primitif pemrosesan tabel integer */
 /* Penempatan elemen selalu rapat kiri */
 
-#include "boolean.h"
-
 #ifndef ARRAY_H 
 #define ARRAY_H
 
+#include "boolean.h"
+
 /* Kamus Umum */
 
-#define IdxMax 9
+#define IdxMax 10
 #define IdxMin 1
 #define IdxUndef -999 /* indeks tak terdefinisi*/
 

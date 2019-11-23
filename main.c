@@ -4,13 +4,22 @@
 #include "board.h"
 #include "move.h"
 #include "game.h"
+#include "stack.h"
 
 int main(){
-    List L, M; Path PL; TabChar T; addressList P, P2; addressPath PP; Queue Q;
-    char pieces; int team, i = 1, X; coordinat coor, AfterCoor;
+    List L, M; Path PL; TabChar T; addressList P, P2; addressPath PP; Queue Q; Stack S;
+    char pieces; int team, i = 1, X; coordinat coor, AfterCoor; infotypeStack ITS1, ITS2;
 
-    NewGame(&Q,&L,&M,&T);
+    NewGame(&Q,&S,&L,&M,&T,&PL);
     /*
+    CreateEmptyStack(&S);
+    ITS1.pieces = 'P';
+    ITS1.team = black;
+    ITS1.coor.hor = 'a';
+    ITS1.coor.ver = 1;
+    PushStack(&S,ITS1);
+    PopStack(&S,&ITS2);
+    printf("%c,(%c,%d),%d", ITS2.pieces,ITS2.coor.hor,ITS2.coor.ver,ITS2.team); 
 
     CreateEmptyList(&M);
 

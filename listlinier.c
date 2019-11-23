@@ -8,14 +8,27 @@
 /****************** TEST LIST KOSONG ******************/
 boolean IsEmpty (List L){
 /* Mengirim true jika list kosong */
-    return (First(L) == Nil);
+    addressList Pdummy;
+
+    Pdummy = First(L);
+    return (Info(Pdummy) == 'X');
 }
 
 /****************** PEMBUATAN LIST KOSONG ******************/
 void CreateEmptyList (List *L){
 /* I.S. sembarang             */
 /* F.S. Terbentuk list kosong */
-    First(*L) = Nil;
+    addressList Pdummy;
+    coordinat coor;
+    coor.hor = 0; coor.ver = 0;
+
+    Pdummy = AlokasiList('X',0,coor);
+    if (Pdummy != Nil){
+        First(*L) = Pdummy;
+    }else{
+        First(*L) = Nil;
+    }
+    
 }
 void CreateEmptyPath (Path *PL){
 /* I.S. sembarang             */
@@ -111,7 +124,7 @@ void InsVFirstPath (Path *PL, coordinat coor){
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
-void InsVLast (List *L, char pieces, int team, coordinat coor){
+void InsVLastList (List *L, char pieces, int team, coordinat coor){
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
@@ -119,7 +132,7 @@ void InsVLast (List *L, char pieces, int team, coordinat coor){
     addressList P;
     P = AlokasiList(pieces, team, coor);
     if (P != Nil){
-        InsertLast(L, P);
+        InsertLastList(L, P);
     }
 }
 
@@ -149,8 +162,11 @@ void DelVLast (List *L, char *X){
 void InsertFirstList (List *L, addressList P){
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. Menambahkan elemen ber-addressList P sebagai elemen pertama */
-    Next(P) = First(*L);
-    First(*L) = P;
+    addressList Pdummy;
+
+    Pdummy = First(*L);
+    Next(P) = Next(Pdummy);
+    Next(Pdummy) = P;
 }
 void InsertFirstPath (Path *PL, addressPath PP){
 /* I.S. Sembarang, P sudah dialokasi  */
@@ -158,14 +174,14 @@ void InsertFirstPath (Path *PL, addressPath PP){
     Next(PP) = First(*PL);
     First(*PL) = PP;
 }
-void InsertAfter (List *L, addressList P, addressList Prec){
+void InsertAfterList (List *L, addressList P, addressList Prec){
 /* I.S. Prec pastilah elemen list dan bukan elemen terakhir, */
 /*      P sudah dialokasi  */
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
     Next(P) = Next(Prec);
     Next(Prec) = P;
 }
-void InsertLast (List *L, addressList P){
+void InsertLastList (List *L, addressList P){
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
     addressList Last;
@@ -177,7 +193,7 @@ void InsertLast (List *L, addressList P){
         while (Next(Last) != Nil){
             Last = Next(Last);
         }
-        InsertAfter(L, P, Last);
+        InsertAfterList(L, P, Last);
     }
 }
 /*** PENGHAPUSAN SEBUAH ELEMEN ***/
@@ -189,29 +205,29 @@ void DelFirst (List *L, addressList *P){
     (*P) = First(*L);
     First(*L) = Next(First(*L));
 }
-void DelP (List *L, char pieces, int team, coordinat coor){
+void DelP (List *L, char pieces, coordinat coor){
 /* I.S. Sembarang */
 /* F.S. Jika ada elemen list beraddressList P, dengan Info(P)=X  */
 /* Maka P dihapus dari list dan di-dealokasi */
 /* Jika tidak ada elemen list dengan Info(P)=X, maka list tetap */
 /* List mungkin menjadi kosong karena penghapusan */
-    addressList P, prec;
+    addressList P1, P2, prec;
 
-    P = SearchList(*L,pieces,coor);
+    P1 = SearchList(*L,pieces,coor);
 
-    if (P != Nil){
-        if (P == First(*L)){
+    if (P1 != Nil){
+        if (P1 == First(*L)){
             DelVFirst(L, &pieces);
         }
         else{
-            P = First(*L);
-            while (Info(P) != pieces){
-                prec = P;
-                P = Next(P);
+            P2 = First(*L);
+            while (P1 != P2){
+                prec = P2;
+                P2 = Next(P2);
             }
-            if (Info(P) == pieces){
-                DelAfter(L, &P, prec);
-                DealokasiList(&P);
+            if (P1 == P2){
+                DelAfter(L, &P2, prec);
+                DealokasiList(&P2);
             }
         }
     }

@@ -2,7 +2,6 @@
 #define BOARD_H
 
 #include "boolean.h"
-#include "converter.h"
 #include "array.h"
 #include "listlinier.h"
 

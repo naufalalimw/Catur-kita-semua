@@ -8,74 +8,73 @@ void NewBoard (List *L){
     int team;
     coordinat coor;
 
-    CreateEmptyList(L);
     for (int i = 1;i <= 8;i++){
-        for (int j = 1;j <= 8;j++){
+        for (int j = 97;j <= 104;j++){
             coor.ver = i;
-            coor.hor = IntToChar(j);
+            coor.hor = j;
             if (i == 1){
-                if (j == 1){
+                if (j == 97){
                     pieces = 'r';
                     team = white;
-                }else if (j == 2){
+                }else if (j == 98){
                     pieces = 'h';
                     team = white;
-                }else if (j == 3){
+                }else if (j == 99){
                     pieces = 'b';
                     team = white;
-                }else if (j == 4){
+                }else if (j == 100){
                     pieces = 'k';
                     team = white;
-                }else if (j == 5){
+                }else if (j == 101){
                     pieces = 'q';
                     team = white;
-                }else if (j == 6){
+                }else if (j == 102){
                     pieces = 'b';
                     team = white;
-                }else if (j == 7){
+                }else if (j == 103){
                     pieces = 'h';
                     team = white;
-                }else if (j == 8){
+                }else if (j == 104){
                     pieces = 'r';
                     team = white;
                 }
-                InsVFirstList(L, pieces, team, coor);
             }else if (i == 2){
                 pieces = 'p';
                 team = white;
-                InsVFirstList(L, pieces, team, coor);
+            }else if ((i >= 3) && (i <= 6)){
+                pieces = ' ';
+                team = 0;
             }else if (i == 7){
                 pieces = 'P';
                 team = black;
-                InsVFirstList(L, pieces, team, coor);
             }else if (i == 8){
-                if (j == 1){
+                if (j == 97){
                     pieces = 'R';
                     team = black;
-                }else if (j == 2){
+                }else if (j == 98){
                     pieces = 'H';
                     team = black;
-                }else if (j == 3){
+                }else if (j == 99){
                     pieces = 'B';
                     team = black;
-                }else if (j == 4){
+                }else if (j == 100){
                     pieces = 'K';
                     team = black;
-                }else if (j == 5){
+                }else if (j == 101){
                     pieces = 'Q';
                     team = black;
-                }else if (j == 6){
+                }else if (j == 102){
                     pieces = 'B';
                     team = black;
-                }else if (j == 7){
+                }else if (j == 103){
                     pieces = 'H';
                     team = black;
-                }else if (j == 8){
+                }else if (j == 104){
                     pieces = 'R';
                     team = black;
                 }
-                InsVFirstList(L, pieces, team, coor);
             }
+        InsVFirstList(L, pieces, team, coor);
         }
     }
 }
@@ -86,16 +85,10 @@ void BoardPos (List L, TabChar *T){
     char pieces;
     coordinat coor;
 
-    for (i = 1;i <= 8;i++){
-        for (j = 1;j <= 8;j++){
-            (*T).TI[i][j] = kosong;
-        }
-    }
-
     P = First(L);
     while (P != Nil){
         pieces = Info(P);
-        coor.hor = CharToInt(&Horizontal(P));
+        coor.hor = Horizontal(P);
         coor.ver = Vertical(P);
         (*T).TI[coor.ver][coor.hor] = pieces;
         P = Next(P);
@@ -107,14 +100,14 @@ void PrintBoard (TabChar T){
         if ((i < 9) && (i > 0)){
             printf("%d ", i);
         }
-        for (int j = 1;j <= 8;j++){
-            if ((i == 9) && (j == 1)){
+        for (int j = 97;j <= 104;j++){
+            if ((i == 9) && (j == 97)){
                 printf("    a   b   c   d   e   f   g   h");
-            }else if ((i < 9) && (i > 0) && (j < 8)){
+            }else if ((i < 9) && (i > 0) && (j < 104)){
                 printf("| %c ", T.TI[i][j]);
-            }else if ((i < 9) && (i > 0) && (j == 8)){
+            }else if ((i < 9) && (i > 0) && (j == 104)){
                 printf("| %c |", T.TI[i][j]);
-            }else if ((i == 0) && (j == 1)){
+            }else if ((i == 0) && (j == 97)){
                 printf("    a   b   c   d   e   f   g   h");
             }
         }

@@ -67,7 +67,7 @@ void DelQueue (Queue * Q, infotypeQueue * X){
 /* F.S. X = nilai elemen HEAD pd I.S., HEAD "maju" dengan mekanisme circular buffer; 
         Q mungkin kosong */
     (*X) = InfoHead(*Q);
-    if ((Head(*Q) == 1) && (Tail(*Q) == 1)){
+    if (Head(*Q) == Tail(*Q)){
         Head(*Q) = 0;
         Tail(*Q) = 0;
     }

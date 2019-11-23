@@ -10,11 +10,11 @@
 
 #define Nil NULL
 #define black 200
-#define white 100
+#define white 150
 #define kosong ' '
 
 typedef struct {
-	char hor;
+	int hor;
 	int ver;
 } coordinat;
 
@@ -94,7 +94,7 @@ void InsVFirstPath (Path *PL, coordinat coor);
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
-void InsVLast (List *L, char pieces, int team, coordinat coor);
+void InsVLastList (List *L, char pieces, int team, coordinat coor);
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
@@ -118,11 +118,11 @@ void InsertFirstList (List *L, addressList P);
 void InsertFirstPath (Path *PL, addressPath PP);
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. Menambahkan elemen ber-addressList P sebagai elemen pertama */
-void InsertAfter (List *L, addressList P, addressList Prec);
+void InsertAfterList (List *L, addressList P, addressList Prec);
 /* I.S. Prec pastilah elemen list dan bukan elemen terakhir, */
 /*      P sudah dialokasi  */
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
-void InsertLast (List *L, addressList P);
+void InsertLastList (List *L, addressList P);
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
 
@@ -132,7 +132,7 @@ void DelFirst (List *L, addressList *P);
 /* F.S. P adalah alamat elemen pertama list sebelum penghapusan */
 /*      Elemen list berkurang satu (mungkin menjadi kosong) */
 /* First element yg baru adalah suksesor elemen pertama yang lama */
-void DelP (List *L, char pieces, int team, coordinat coor);
+void DelP (List *L, char pieces, coordinat coor);
 /* I.S. Sembarang */
 /* F.S. Jika ada elemen list beraddressList P, dengan info(P)=X  */
 /* Maka P dihapus dari list dan di-dealokasi */

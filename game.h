@@ -11,7 +11,7 @@
 
 void NewGame (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL);
 
-void command (Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore);
+void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore);
 
 void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore);
 

@@ -25,14 +25,13 @@ void NewGame (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL){
     BoardPos(*L,T);
     PrintBoard(*T);
     do{
-        DelQueue(Q,&team);
-        command(S,L,M,T,PL,team,&whiteScore,&blackScore);
+        command(Q,S,L,M,T,PL,team,&whiteScore,&blackScore);
     } while (!IsEmptyQueue(*Q) && (!isKingDead(*L)));
     printf("skor pemain putih : %d\n", whiteScore);
     printf("skor pemain hitam : %d", blackScore);   
 }
 
-void command (Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore){
+void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore){
     addressList P;
     infotypeStack X;
     char com[20];
@@ -49,6 +48,7 @@ void command (Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *w
     
     if (strcmp(com, "move") == 0){
         PrintBoard(*T);
+        DelQueue(Q, &team);
         turn(S,*L,M,T,PL,team,whiteScore,blackScore);
     }else if (strcmp(com, "special_move") == 0){
 
@@ -62,6 +62,8 @@ void command (Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *w
             BoardPos(*L,T);
         }
         PrintBoard(*T);
+        AddQueue(Q, white);
+        AddQueue(Q, black);
     }
 }
 

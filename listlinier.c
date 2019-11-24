@@ -20,7 +20,7 @@ void CreateEmptyList (List *L){
 /* F.S. Terbentuk list kosong */
     addressList Pdummy;
     coordinat coor;
-    coor.hor = 0; coor.ver = 0;
+    coor.hor = 48; coor.ver = 0;
 
     Pdummy = AlokasiList('X',0,coor);
     if (Pdummy != Nil){
@@ -99,6 +99,45 @@ addressList SearchList (List L, char pieces, coordinat coor){
     }
     return P;
 }
+addressList SearchListPieces (List L, char pieces){
+/* Mencari apakah ada elemen list dengan info(P)= X */
+/* Jika ada, mengirimkan addressList elemen tersebut. */
+/* Jika tidak ada, mengirimkan Nil */
+    addressList P;
+    boolean found;
+
+    P = First(L);
+
+    found = false;
+    while ((P != Nil) && (!found)){
+        if (Info(P) == pieces){
+            found = true;
+        }else{
+        P = Next(P);
+        }
+    }
+    return P;
+}
+addressList SearchListCoordinat (List L, coordinat coor){
+/* Mencari apakah ada elemen list dengan info(P)= X */
+/* Jika ada, mengirimkan addressList elemen tersebut. */
+/* Jika tidak ada, mengirimkan Nil */
+    addressList P;
+    boolean found;
+
+    P = First(L);
+
+    found = false;
+    while ((P != Nil) && (!found)){
+        if ((Horizontal(P) == coor.hor) && (Vertical(P) == coor.ver)){
+            found = true;
+        }else{
+        P = Next(P);
+        }
+    }
+    return P;
+}
+
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/
 void InsVFirstList (List *L, char pieces, int team, coordinat coor){
@@ -275,10 +314,10 @@ void PrintInfoList (List L){
     else {
         printf("[");
         while (Next(P) != Nil) {
-            printf("(%c,%d),", Horizontal(P), Vertical(P));
+            printf("%c,", Info(P));
             P = Next(P);
         }
-        printf("(%c,%d)]", Horizontal(P), Vertical(P));
+        printf("%c]", Info(P));
     }  
 }
 void PrintInfoPath (Path PL){

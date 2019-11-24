@@ -10,6 +10,105 @@ boolean isPieces (char pieces){
     return (pieces != ' ');
 }
 
+boolean isCheckMate (List L, List AllyMovement, TabChar T, int *team){
+    List EnemyMovement, EnemyKingKiller; Path PL, EKPL;
+    addressList P, KingP, EnemyKingKillerP; addressPath PP, EKPP;
+    boolean found; coordinat CurrCoor, NextCoor;
+
+    if (*team == white){
+        *team = black;
+    }else if (*team == black){
+        *team = white;
+    }
+
+    piecesMove(L,&EnemyMovement,T,team);
+
+    if (*team == white){
+        KingP = SearchListPieces(L,'k');
+    }else if (*team == black){
+        KingP = SearchListPieces(L,'K');
+    }
+
+    printf("(%c,%d)\n", Horizontal(KingP), Vertical(KingP));
+
+    P = First(AllyMovement); P = Next(P);
+    PrintInfoList(AllyMovement);
+    CreateEmptyList(&EnemyKingKiller);
+    while (P != Nil){
+        posMove(L,P,T,&PL);
+        PP = First(PL); found = false;
+        while ((PP != Nil) && (!found)){
+            if ((Horizontal(PP) == Horizontal(KingP)) && (Vertical(PP) == Vertical(KingP))){
+                printf("NYAMPE");
+                InsVLastList(&EnemyKingKiller,Info(P),Team(P),Coor(P));
+                found = true;
+            }
+            PP = Next(PP);
+        }
+        P = Next(P);
+    }
+
+    PrintInfoList(EnemyKingKiller);
+
+    EnemyKingKillerP = First(EnemyKingKiller);
+    if (EnemyKingKillerP != Nil){
+        CreateEmptyPath(&EKPL);
+        kingsPath(L,T,&EKPL,Coor(KingP));
+        EKPP = First(EKPL);
+        while((EKPP != Nil) && (!found)){
+            P = First(AllyMovement);
+            CreateEmptyList(&EnemyKingKiller);
+            while (P != Nil){
+                posMove(L,P,T,&PL);
+                PP = First(PL); found = false;
+                while ((PP != Nil) && (!found)){
+                    if ((Horizontal(PP) == Horizontal(EKPP)) && (Vertical(PP) == Vertical(EKPP))){
+                        InsVFirstList(&EnemyKingKiller,Info(P),Team(P),Coor(P));
+                        found = true;
+                    }
+                    PP = Next(PP);
+                }
+                P = Next(P);
+            }
+            EnemyKingKillerP = First(EnemyKingKiller);
+            if (EnemyKingKillerP != Nil){
+                EKPP = Next(EKPP);
+            }else{
+                found = true;
+            }
+        }
+    }
+
+    if (found){
+        return false;
+    }else{
+        return true;
+    }
+
+
+    /*
+    found = false;
+    P = First(M);
+    while ((P != Nil) && (!found)){
+        if (Info(P) == 'P'){
+            blackpawnsPath(L,T,&PL,CurrCoor);
+        }else if (Info(P) == 'p'){
+            whitepawnsPath(L,T,&PL,CurrCoor);
+        }else if ((Info(P) == 'R') || (Info(P) == 'r')){
+            rooksPath(L,T,&PL,CurrCoor);
+        }else if ((Info(P) == 'H') || (Info(P) == 'h')){
+            horsesPath(L,T,&PL,CurrCoor);
+        }else if ((Info(P) == 'B') || (Info(P) == 'b')){
+            bishopsPath(L,T,&PL,CurrCoor);
+        }else if ((Info(P) == 'Q') || (Info(P) == 'q')){
+            queesPath(L,T,&PL,CurrCoor);
+        }else if ((Info(P) == 'K') || (Info(P) == 'k')){
+            kingsPath(L,T,&PL,CurrCoor);
+        }
+    }
+    */
+}
+
 boolean isKingDead (List L){
     addressList P; int found;
 

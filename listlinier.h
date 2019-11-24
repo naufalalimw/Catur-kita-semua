@@ -44,6 +44,7 @@ typedef struct {
 /* Elemen terakhir list : jika addressnya Last, maka Next(Last)=Nil */
 #define Info(P) (P)->info
 #define Team(P) (P)->team
+#define Coor(P) (P)->coor
 #define Horizontal(P) (P)->coor.hor
 #define Vertical(P) (P)->coor.ver
 #define Next(P) (P)->next
@@ -80,6 +81,14 @@ void DealokasiList (addressList *P);
 
 /****************** PENCARIAN SEBUAH ELEMEN LIST ******************/
 addressList SearchList (List L, char pieces, coordinat coor);
+/* Mencari apakah ada elemen list dengan info(P)= X */
+/* Jika ada, mengirimkan addressList elemen tersebut. */
+/* Jika tidak ada, mengirimkan Nil */
+addressList SearchListPieces (List L, char pieces);
+/* Mencari apakah ada elemen list dengan info(P)= X */
+/* Jika ada, mengirimkan addressList elemen tersebut. */
+/* Jika tidak ada, mengirimkan Nil */
+addressList SearchListCoordinat (List L, coordinat coor);
 /* Mencari apakah ada elemen list dengan info(P)= X */
 /* Jika ada, mengirimkan addressList elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */

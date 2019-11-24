@@ -2,12 +2,15 @@
 #define MOVE_H
 
 #include "boolean.h"
+#include "game.h"
 #include "array.h"
 #include "listlinier.h"
 
 boolean isAlly (int team1, int team2);
 
 boolean isPieces (char pieces);
+
+boolean isCheckMate (List L, List M, TabChar T, int *team);
 
 boolean isKingDead (List L);
 

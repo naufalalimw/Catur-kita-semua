@@ -25,13 +25,13 @@ void NewGame (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL){
     BoardPos(*L,T);
     PrintBoard(*T);
     do{
-        command(Q,S,L,M,T,PL,team,&whiteScore,&blackScore);
-    } while (!IsEmptyQueue(*Q) && (!isKingDead(*L)));
+        command(Q,S,L,M,T,PL,&team,&whiteScore,&blackScore);
+    } while (!IsEmptyQueue(*Q) && (!isKingDead(*L)) && (isCheckMate(*L,*M,*T,&team)));
     printf("skor pemain putih : %d\n", whiteScore);
     printf("skor pemain hitam : %d", blackScore);   
 }
 
-void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore){
+void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore){
     addressList P;
     infotypeStack X;
     char com[20];
@@ -48,9 +48,14 @@ void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int te
     
     if (strcmp(com, "move") == 0){
         PrintBoard(*T);
-        DelQueue(Q, &team);
+        DelQueue(Q, team);
         turn(S,*L,M,T,PL,team,whiteScore,blackScore);
     }else if (strcmp(com, "special_move") == 0){
+        /*
+            - en passant
+            - castling
+            - promotion
+        */
 
     }else if (strcmp(com, "undo") == 0){
         for (int i = 1;i <= 2;i++){
@@ -67,10 +72,9 @@ void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int te
     }
 }
 
-void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore){
+void piecesMove(List L, List *M, TabChar T, int *team){
     addressList P;
-    coordinat coor, CurrCoor, NextCoor;
-    int choice; char pieces;
+    coordinat coor;
 
     CreateEmptyList(M);
 
@@ -78,20 +82,44 @@ void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int team, int *white
     while (P != Nil){
         coor.hor = Horizontal(P);
         coor.ver = Vertical(P);
-        if ((isPiecesMove(L,*T,Info(P),coor)) && (Team(P) == team)){
+        if ((isPiecesMove(L,T,Info(P),coor)) && (Team(P) == *team)){
             InsVFirstList(M,Info(P),Team(P),coor);
         }
         P = Next(P);
     }
+}
+
+void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore){
+    addressList P; addressPath PP;
+    coordinat coor, CurrCoor, NextCoor;
+    int i, choice; char pieces;
+
+    piecesMove(L,M,*T,team);
 
     printf("Buah catur yang dapat dipindahkan :\n");
     printTurn(*M);
     printf("Pilih buah catur yang ingin dipindahkan : "); scanf("%d", &choice);
-    posMove(L,*M,*T,PL,&pieces,&team,&CurrCoor,choice);
+    i = 1;
+
+    P = First(*M);
+    while (i != choice+1){
+        P = Next(P);
+        i++;
+    }
+
+    posMove(L,P,*T,PL);
     printf("Koordinat yang dapat dipilih :\n");
     printPosMove(*PL);
     printf("Pilih koordinat yang akan dipilih : "); scanf("%d", &choice);
-    movement(S,&L,*PL,pieces,team,CurrCoor,&NextCoor,choice,whiteScore,blackScore);
+    i = 1;
+
+    PP = First(*PL);
+    while (i != choice){
+        PP = Next(PP);
+        i++;
+    }
+
+    movement(S,&L,P,*PL,PP,whiteScore,blackScore);
 
     BoardPos(L,T);
     PrintBoard(*T);
@@ -111,37 +139,27 @@ void printTurn (List M){
     }
 }
 
-void posMove (List L, List M, TabChar T, Path *PL, char *pieces, int *team, coordinat *CurrCoor, int choice){
-    addressList P;
-    int i = 1;
+void posMove (List L, addressList P, TabChar T, Path *PL){
+    coordinat coor;
 
     CreateEmptyPath(PL);
 
-    P = First(M);
-    while (i != choice+1){
-        P = Next(P);
-        i++;
-    }
-
-    (*pieces) = Info(P);
-    (*team) = Team(P);
-    (*CurrCoor).hor = Horizontal(P);
-    (*CurrCoor).ver = Vertical(P);
+    coor = Coor(P);
 
     if (Info(P) == 'P'){
-        blackpawnsPath(L,T,PL,*CurrCoor);
+        blackpawnsPath(L,T,PL,coor);
     }else if (Info(P) == 'p'){
-        whitepawnsPath(L,T,PL,*CurrCoor);
+        whitepawnsPath(L,T,PL,coor);
     }else if ((Info(P) == 'R') || (Info(P) == 'r')){
-        rooksPath(L,T,PL,*CurrCoor);
+        rooksPath(L,T,PL,coor);
     }else if ((Info(P) == 'H') || (Info(P) == 'h')){
-        horsesPath(L,T,PL,*CurrCoor);
+        horsesPath(L,T,PL,coor);
     }else if ((Info(P) == 'B') || (Info(P) == 'b')){
-        bishopsPath(L,T,PL,*CurrCoor);
+        bishopsPath(L,T,PL,coor);
     }else if ((Info(P) == 'Q') || (Info(P) == 'q')){
-        queesPath(L,T,PL,*CurrCoor);
+        queesPath(L,T,PL,coor);
     }else if ((Info(P) == 'K') || (Info(P) == 'k')){
-        kingsPath(L,T,PL,*CurrCoor);
+        kingsPath(L,T,PL,coor);
     }
 }
 
@@ -157,49 +175,38 @@ void printPosMove (Path PL){
     }
 }
 
-void movement (Stack *S, List *L, Path PL, char CurrPieces, int CurrTeam, coordinat CurrCoor, coordinat *NextCoor, int choice, int *whiteScore, int *blackScore){
-    addressList P; addressPath PP;
+void movement (Stack *S, List *L, addressList CurrP, Path PL, addressPath PP, int *whiteScore, int *blackScore){
+    addressList NextP;
     infotypeStack X;
     boolean found, eaten;
-    int i = 1; char NextPieces; int NextTeam;
+    char CurrPieces, NextPieces; int CurrTeam, NextTeam; coordinat CurrCoor, NextCoor;
 
-    PP = First(PL);
-    while (i != choice){
-        PP = Next(PP);
-        i++;
-    }
+    NextCoor = Coor(PP);
 
-    (*NextCoor).hor = Horizontal(PP);
-    (*NextCoor).ver = Vertical(PP);
+    NextP = SearchListCoordinat(*L,NextCoor);
 
-    P = First(*L);
-    found = false;
-    while ((P != Nil) && (!found)){
-        if ((Horizontal(P) == (*NextCoor).hor) && (Vertical(P) == (*NextCoor).ver)){
-            found = true;
-        }else{
-            P = Next(P);
-        }
-    }
+    NextPieces = Info(NextP);
+    NextTeam = Team(NextP);
 
-    NextPieces = Info(P);
-    NextTeam = Team(P);
+    CurrPieces = Info(CurrP);
+    CurrTeam = Team(CurrP);
+    CurrCoor = Coor(CurrP);
 
     if (isPieces(NextPieces)){
         DelP(L,CurrPieces,CurrCoor);
-        DelP(L,NextPieces,*NextCoor);
-        InsVLastList(L,CurrPieces,CurrTeam,*NextCoor);
+        DelP(L,NextPieces,NextCoor);
+        InsVLastList(L,CurrPieces,CurrTeam,NextCoor);
         InsVLastList(L,kosong,0,CurrCoor);
     }else{
         DelP(L,CurrPieces,CurrCoor);
-        DelP(L,NextPieces,*NextCoor);
-        InsVLastList(L,CurrPieces,CurrTeam,*NextCoor);
+        DelP(L,NextPieces,NextCoor);
+        InsVLastList(L,CurrPieces,CurrTeam,NextCoor);
         InsVLastList(L,NextPieces,NextTeam,CurrCoor);
     }
 
     X.PrevPieces = CurrPieces; X.NextPieces = NextPieces;
     X.PrevTeam = CurrTeam; X.NextTeam = NextTeam;
-    X.PrevCoor = CurrCoor; X.NextCoor = (*NextCoor);
+    X.PrevCoor = CurrCoor; X.NextCoor = NextCoor;
     PushStack(S, X);
 
     if (CurrTeam == white){
@@ -207,7 +214,6 @@ void movement (Stack *S, List *L, Path PL, char CurrPieces, int CurrTeam, coordi
     }else if (CurrTeam == black){
         getScore(NextPieces, blackScore);
     }
-        
 }
 
 void getScore(char NextPieces, int *score){

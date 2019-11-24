@@ -23,10 +23,10 @@ void NewBoard (List *L){
                     pieces = 'b';
                     team = white;
                 }else if (j == 100){
-                    pieces = 'k';
+                    pieces = 'q';
                     team = white;
                 }else if (j == 101){
-                    pieces = 'q';
+                    pieces = 'k';
                     team = white;
                 }else if (j == 102){
                     pieces = 'b';
@@ -58,10 +58,10 @@ void NewBoard (List *L){
                     pieces = 'B';
                     team = black;
                 }else if (j == 100){
-                    pieces = 'K';
+                    pieces = 'Q';
                     team = black;
                 }else if (j == 101){
-                    pieces = 'Q';
+                    pieces = 'K';
                     team = black;
                 }else if (j == 102){
                     pieces = 'B';
@@ -102,7 +102,8 @@ void PrintBoard (TabChar T){
         }
         for (int j = 97;j <= 104;j++){
             if ((i == 9) && (j == 97)){
-                printf("    a   b   c   d   e   f   g   h");
+                printf("    a   b   c   d   e   f   g   h\n");
+                printf("   --- --- --- --- --- --- --- ---");
             }else if ((i < 9) && (i > 0) && (j < 104)){
                 printf("| %c ", T.TI[i][j]);
             }else if ((i < 9) && (i > 0) && (j == 104)){
@@ -112,7 +113,8 @@ void PrintBoard (TabChar T){
             }
         }
         if ((i < 9) && (i > 0)){
-            printf(" %d", i);
+            printf(" %d", i); printf("\n");
+            printf("   --- --- --- --- --- --- --- ---");
         }
         printf("\n");
     }

@@ -11,17 +11,19 @@
 
 void NewGame (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL);
 
-void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore);
+void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore);
 
-void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int team, int *whiteScore, int *blackScore);
+void piecesMove (List L, List *M, TabChar T, int *team);
+
+void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore);
 
 void printTurn (List M);
 
-void posMove (List L, List M, TabChar T, Path *PL, char *pieces, int *team, coordinat *CurrCoor, int choice);
+void posMove (List L, addressList P, TabChar T, Path *PL);
 
 void printPosMove (Path PL);
 
-void movement (Stack *S, List *L, Path PL, char CurrPieces, int CurrTeam, coordinat CurrCoor, coordinat *NextCoor, int choice, int *whiteScore, int *blackScore);
+void movement (Stack *S, List *L, addressList CurrP, Path PL, addressPath PP, int *whiteScore, int *blackScore);
 
 void getScore(char NextPieces, int *score);
 

@@ -64,3 +64,119 @@ boolean Iscastling (List L, TabChar T, coordinat KingCoor, coordinat RooksCoor)
         }
     }
 } 
+
+boolean isEnpassant(List L, Stack S, coordinat pawn)
+// mengecek apakah bisa melakukan enpassant
+{
+    addressList centralpawn, rightside, leftside;
+    char curpawn, rpawn, lpawn;
+    coordinat leftpawn, rightpawn;
+
+    //koordinat
+    leftpawn = curpawn; leftpawn.hor--;
+    rightpawn = curpawn; rightpawn.hor++;
+
+    //karakter/bidak
+    curpawn = T.TI[pawn.ver][pawn.hor];
+    rpawn = T.TI[rightpawn.ver][rightpawn.hor];
+    lpawn = T.TI[leftpawn.ver][leftpawn.hor];
+
+    //adrress list
+    centralpawn = SearchList(L,curpawn,pawn);
+    rightside = SearchList(L,rpawn,rightpawn);
+    leftpawn = SearchList(L,lpawn,leftpawn);
+
+    if (Team(centralpawn) == black)
+    {
+        if ((info(rightside)=='p') || (info(leftside)=='p'))
+        {
+            return//masukin stack true or false
+        }
+    }else if (Team(centralpawn)==white)
+    {
+        if ((info(rightside)=='P') || (info(leftside)=='P') )
+        {
+            return//masukin bagian stacknya
+        }  
+    }
+}
+
+void Enpassant(List L, Stack S, coordinat pawn)
+//melakukan gerakan en passant
+{
+    addressList centralpawn, rightside, leftside;
+    char curpawn, rpawn, lpawn;
+    coordinat leftpawn, rightpawn;
+
+    //koordinat
+    leftpawn = curpawn; leftpawn.hor--;
+    rightpawn = curpawn; rightpawn.hor++;
+
+    //karakter/bidak
+    curpawn = T.TI[pawn.ver][pawn.hor];
+    rpawn = T.TI[rightpawn.ver][rightpawn.hor];
+    lpawn = T.TI[leftpawn.ver][leftpawn.hor];
+
+    //adrress list
+    centralpawn = SearchList(L,curpawn,pawn);
+    rightside = SearchList(L,rpawn,rightpawn);
+    leftpawn = SearchList(L,lpawn,leftpawn);
+
+    if (isEnpassant(L,S,pawn))
+    {
+        if (Team(centralpawn)==black)
+        { 
+            if (info(rightside)=='p')
+            {
+                Horizontal(centralpawn)++;
+                Vertical(centralpawn)--;
+                DealokasiList(&rightside)
+            } else if (info(leftside)=='p')
+            {
+                Horizontal(centralpawn)--;
+                Vertical(centralpawn)--;
+                DealokasiList(&leftside);
+            }
+        } else if (Team(centralpawn)==white)
+        {
+            if (info(rightside)=='p')
+            {
+                Horizontal(centralpawn)++;
+                Vertical(centralpawn)++;
+                DealokasiList(&rightside)
+            } else if (info(leftside)=='p')
+            {
+                Horizontal(centralpawn)--;
+                Vertical(centralpawn)++;
+                DealokasiList(&leftside);
+            }
+        }   
+    } 
+}
+
+void Promotion(List L, TabChar T, coordinat coorpawn)
+{
+    char pawnpieces;
+    addressList PawnP;
+    char promosi;
+
+    pawnpieces = T.TI[coorpawn.ver][coorpawn.hor];
+    PawnP = SearchList(L,pawnpieces,coorpawn);
+
+    if (isPiecesMove(L,T,pawnpieces,coorpawn))
+    {
+        if ((Team(PawnP)==black) && (Vertical(PawnP)==2))
+        {
+            // tolong man ini jalanin maju
+            printf('Pion sudah sampai di ujung, silakan masukan perubahan pada pion');
+            scanf("%c\n", &promosi);
+            info(PawnP) = promosi;
+        } else if ((Team(PawnP)==white) && (Vertical(PawnP)==7))
+        {
+            // tolong man ini jalanin maju
+            printf('Pion sudah sampai di ujung, silakan masukan perubahan pada pion');
+            scanf("%c\n", &promosi);
+            info(PawnP) = promosi;
+        }
+    }
+}

@@ -9,7 +9,7 @@ typedef struct {
 
 
 int main(){
-    char *filename
+    char *filename;
 
     Ignore_Blank();
     STARTKATA(*filename);

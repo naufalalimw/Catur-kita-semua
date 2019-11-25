@@ -1,3 +1,5 @@
+#include "boolean.h"
+#include "ScoreBoard.h"
 #include <stdio.h>
  
 typedef struct {
@@ -28,6 +30,7 @@ void showScoreboard(Player *player)
     int i,j,temp;
     i = 1;
  
+    
     while ((i<100) && (!feof(scoreboardfile)))
     {
         fscanf(scoreboardfile, "%s %d", &player->name, &player->score);
@@ -38,14 +41,3 @@ void showScoreboard(Player *player)
 }
 
 
-
-
-int main() {
-  int i, j, temp;
-  Player p;
-
-  showScoreboard(&p);
-  addToScoreboard();
-
-  return 0;
-}

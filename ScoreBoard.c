@@ -1,7 +1,7 @@
 #include <stdio.h>
  
 typedef struct {
-  char name[20];
+  char name[3];
   int score;
 }Player;
 

@@ -80,17 +80,11 @@ void NewBoard (List *L){
 }
 
 void BoardPos (List L, TabChar *T){
-    int i, j;
     addressList  P;
-    char pieces;
-    coordinat coor;
 
     P = First(L);
     while (P != Nil){
-        pieces = Info(P);
-        coor.hor = Horizontal(P);
-        coor.ver = Vertical(P);
-        (*T).TI[coor.ver][coor.hor] = pieces;
+        (*T).TI[Vertical(P)][Horizontal(P)] = Info(P);
         P = Next(P);
     }
 }

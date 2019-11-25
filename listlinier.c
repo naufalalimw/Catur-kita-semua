@@ -6,12 +6,13 @@
 
 /* PROTOTYPE */
 /****************** TEST LIST KOSONG ******************/
-boolean IsEmpty (List L){
+boolean IsEmptyList (List L){
 /* Mengirim true jika list kosong */
     addressList Pdummy;
 
     Pdummy = First(L);
-    return (Info(Pdummy) == 'X');
+    Pdummy = Next(Pdummy);
+    return (Pdummy == Nil);
 }
 
 /****************** PEMBUATAN LIST KOSONG ******************/
@@ -345,7 +346,7 @@ int NbElmt (List L){
     addressList P;
     int count = 0;
 
-    P = First(L);
+    P = First(L); P = Next(P);
     while (P != Nil){
         count++;
         P = Next(P);

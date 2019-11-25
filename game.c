@@ -26,15 +26,27 @@ void NewGame (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL){
     PrintBoard(*T);
     do{
         command(Q,S,L,M,T,PL,&team,&whiteScore,&blackScore);
-    } while (!IsEmptyQueue(*Q) && (!isKingDead(*L)) && (isCheckMate(*L,*M,*T,&team)));
-    printf("skor pemain putih : %d\n", whiteScore);
-    printf("skor pemain hitam : %d", blackScore);   
+    } while ((!IsEmptyQueue(*Q)) && (!isKingDead(*L)) && (!isCheckMate(*L,*T,white)) && (!isCheckMate(*L,*T,black)));
+
+    if (isKingDead(*L)){
+        printf("skor pemain putih : %d\n", whiteScore);
+        printf("skor pemain hitam : %d", blackScore);
+    }else{
+        if (!isCheckMate(*L,*T,white)){
+            whiteScore += 20;
+        }else if (!isCheckMate(*L,*T,black)){
+            blackScore += 20;
+        }
+        printf("skor pemain putih : %d\n", whiteScore);
+        printf("skor pemain hitam : %d", blackScore);
+    }   
 }
 
 void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore){
-    addressList P;
+    addressList P; 
     infotypeStack X;
     char com[20];
+    addressList KingP, RookP; coordinat RookCoor;
 
     printf("Masukkan command (ketik 'help' untuk menampilkan command yang bisa dipilih) : ");
     scanf("%s", &com);
@@ -51,6 +63,11 @@ void command (Queue *Q, Stack *S, List *L, List *M, TabChar *T, Path *PL, int *t
         DelQueue(Q, team);
         turn(S,*L,M,T,PL,team,whiteScore,blackScore);
     }else if (strcmp(com, "special_move") == 0){
+        DelQueue(Q, team);
+        if (isPromotion(*L,*team)){
+            promotion(S,L,M,T,PL,team);
+        }
+        
         /*
             - en passant
             - castling
@@ -136,30 +153,6 @@ void printTurn (List M){
             i++;
         }
         P = Next(P);
-    }
-}
-
-void posMove (List L, addressList P, TabChar T, Path *PL){
-    coordinat coor;
-
-    CreateEmptyPath(PL);
-
-    coor = Coor(P);
-
-    if (Info(P) == 'P'){
-        blackpawnsPath(L,T,PL,coor);
-    }else if (Info(P) == 'p'){
-        whitepawnsPath(L,T,PL,coor);
-    }else if ((Info(P) == 'R') || (Info(P) == 'r')){
-        rooksPath(L,T,PL,coor);
-    }else if ((Info(P) == 'H') || (Info(P) == 'h')){
-        horsesPath(L,T,PL,coor);
-    }else if ((Info(P) == 'B') || (Info(P) == 'b')){
-        bishopsPath(L,T,PL,coor);
-    }else if ((Info(P) == 'Q') || (Info(P) == 'q')){
-        queesPath(L,T,PL,coor);
-    }else if ((Info(P) == 'K') || (Info(P) == 'k')){
-        kingsPath(L,T,PL,coor);
     }
 }
 

@@ -4,6 +4,7 @@
 #include "boolean.h"
 #include "board.h"
 #include "move.h"
+#include "specialmove.h"
 #include "array.h"
 #include "queue.h"
 #include "stack.h"
@@ -18,8 +19,6 @@ void piecesMove (List L, List *M, TabChar T, int *team);
 void turn (Stack *S, List L, List *M, TabChar *T, Path *PL, int *team, int *whiteScore, int *blackScore);
 
 void printTurn (List M);
-
-void posMove (List L, addressList P, TabChar T, Path *PL);
 
 void printPosMove (Path PL);
 
